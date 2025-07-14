@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaPiin - 創作者媒合平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Microsoft JhengHei', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .header-image-mobile {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-logo {
+            height: 36px;
+            width: auto;
+            display: block;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #e74c3c;
+        }
+
+        .login-btn {
+            background: #007CD3;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 124, 211, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 124, 211, 0.4);
+            background: #0069b3;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 80px 0 40px 0;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        .hero-section {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        .hero-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            max-width: 850px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .option-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 40px 30px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(219, 0, 0, 0.1), rgba(0, 124, 211, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .option-card:hover::before {
+            opacity: 0;
+        }
+
+        .option-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .option-card.brand:hover {
+            border-color: #007CD3;
+        }
+
+        .option-card.creator:hover {
+            border-color: #007CD3;
+        }
+
+        .option-card.case:hover {
+            border-color: #DB0000;
+        }
+
+        .option-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .brand .option-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .creator .option-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .case .option-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+        }
+
+        .option-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            position: relative;
+            z-index: 2;
+        }
+
+        .option-description {
+            font-size: 16px;
+            color: #7f8c8d;
+            line-height: 1.5;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Ghost Buttons */
+        .ghost-buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 50px;
+        }
+
+        .ghost-btn {
+            background-color: #ffffff;
+            border: 2px solid #aaaaaa;
+            color: #888888;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .ghost-btn:hover {
+            color: #333333;
+            border-color: #333333;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 120px;
+        }
+
+        .footer-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .footer-image-mobile {
+            width: 100%;
+            height: auto;
+            display: none;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .language-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .copyright {
+            color: #95a5a6;
+            font-size: 14px;
+        }
+
+        .legal-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .legal-link {
+            color: #95a5a6;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .legal-link:hover {
+            color: #e74c3c;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-image {
+                display: none;
+            }
+
+            .header-image-mobile {
+                display: block;
+                margin-bottom: 30px;
+            }
+
+            .footer-image {
+                display: none;
+            }
+
+            .footer-image-mobile {
+                display: block;
+                margin-top: 30px;
+            }
+
+            .main-content {
+                padding: 20px 0 40px 0;
+            }
+
+            .hero-title {
+                font-size: 30px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .options-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0;
+                margin: 0 -40px;
+            }
+
+            .option-card {
+                padding: 20px 20px 20px 15px;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                width: 100%;
+                min-height: 160px;
+            }
+
+            .option-icon {
+                margin: 0;
+                width: 80px !important;
+                height: 80px !important;
+            }
+
+            .option-content {
+                text-align: left;
+            }
+
+            .option-title {
+                font-size: 20px;
+                margin-bottom: 8px;
+            }
+
+            .option-description {
+                font-size: 14px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .brand-logo {
+                height: 30px;
+            }
+
+            .ghost-buttons-container {
+                flex-direction: row;
+                gap: 15px;
+                margin-top: 40px;
+                justify-content: center;
+            }
+
+            .ghost-btn {
+                width: auto;
+                padding: 8px 20px;
+                font-size: 14px;
+                text-align: center;
+            }
+            .footer-image-mobile {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100vw;
+                z-index: 99;
+            }
+            .main-content {
+                padding-bottom: 80px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section {
+            animation: none;
+        }
+
+        .option-card {
+            animation: none;
+        }
+
+        .option-card:nth-child(2) {
+            animation: none;
+        }
+
+        /* Hot Jobs Section - 完全貼合圖片設計 */
+        .hot-jobs-section {
+            margin-top: 140px;
+            margin-bottom: 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hot-jobs-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 32px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .job-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            max-width: 900px;
+            padding: 36px 48px 24px 48px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 32px;
+            margin-bottom: 32px;
+            border: 1px solid #ededed;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .job-card-left {
+            flex: 1 1 0%;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .job-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+        .job-location {
+            color: #e74c3c;
+            font-size: 16px;
+            margin-bottom: 2px;
+            text-align: left;
+        }
+        .job-salary {
+            color: #e74c3c;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .job-desc {
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        .job-summary {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            max-width: 600px;
+            text-align: left;
+        }
+        .job-tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            justify-content: flex-start;
+        }
+        .job-tag {
+            background: #e0e0e0;
+            color: #444;
+            border-radius: 16px;
+            padding: 4px 18px;
+            font-size: 14px;
+        }
+        .job-applicants {
+            color: #888;
+            font-size: 14px;
+            margin-top: 10px;
+            text-align: left;
+        }
+        .job-card-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            min-width: 180px;
+            max-width: 220px;
+            height: 100%;
+            justify-content: flex-start;
+        }
+        .job-update {
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 18px;
+            align-self: flex-end;
+        }
+        .company-info-box {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .company-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 10px;
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+        }
+        .company-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 2px;
+        }
+        .company-type {
+            font-size: 13px;
+            color: #888;
+        }
+        .job-card-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 160px;
+            margin-top: 18px;
+        }
+        .job-action-btn {
+            background: #fff;
+            color: #e74c3c;
+            border: 1.5px solid #e74c3c;
+            border-radius: 6px;
+            padding: 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            width: 100%;
+        }
+        .job-action-btn:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .view-all-jobs-btn {
+            display: inline-block;
+            margin: 40px auto 0 auto;
+            background: #fff;
+            color: #e74c3c;
+            border: 2px solid #e74c3c;
+            border-radius: 28px;
+            padding: 12px 32px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            text-align: center;
+            text-decoration: none;
+        }
+        .view-all-jobs-btn:hover {
+            background: #e74c3c;
+            color: #fff;
+        }
+        @media (max-width: 900px) {
+            .hot-jobs-section {
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+            .job-card {
+                flex-direction: column;
+                padding: 20px 8px 12px 8px;
+                gap: 18px;
+            }
+            .job-card-right {
+                align-items: center;
+                min-width: 0;
+                max-width: none;
+                width: 100%;
+            }
+            .company-info-box {
+                margin-bottom: 12px;
+                justify-content: center;
+            }
+            .job-card-actions {
+                flex-direction: row;
+                gap: 10px;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .job-action-btn {
+                width: auto;
+                min-width: 100px;
+            }
+        }
+        @media (max-width: 900px) {
+            /* 熱門職缺卡片手機版排版，只針對 .hot-jobs-section 內部 */
+            .hot-jobs-section {
+                margin-top: 48px;
+            }
+            .hot-jobs-section .job-card {
+                flex-direction: column;
+                padding: 16px 8px 12px 8px;
+                gap: 10px;
+                max-width: 100%;
+                min-height: 180px;
+            }
+            .hot-jobs-section .job-meta-row {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                min-height: 28px;
+                margin-bottom: 18px;
+                margin-top: 10px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .hot-jobs-section .job-meta-row .job-location,
+            .hot-jobs-section .job-meta-row .job-salary {
+                color: #222;
+            }
+            .hot-jobs-section .job-location {
+                flex: 1 1 0;
+                min-width: 0;
+                text-align: left;
+                margin: 0;
+                padding: 0;
+                line-height: 1.5;
+                display: flex;
+                align-items: center;
+            }
+            .hot-jobs-section .job-salary {
+                text-align: right;
+                white-space: nowrap;
+                margin: 0;
+                padding: 0;
+                line-height: 1.5;
+                display: flex;
+                align-items: center;
+                flex-shrink: 0;
+            }
+            .hot-jobs-section .job-desc,
+            .hot-jobs-section .job-summary,
+            .hot-jobs-section .job-card-actions,
+            .hot-jobs-section .job-update {
+                display: none !important;
+            }
+            .hot-jobs-section .job-card-left {
+                align-items: flex-start;
+                gap: 2px;
+            }
+            .hot-jobs-section .job-title {
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+            .hot-jobs-section .company-info-box {
+                display: flex !important;
+                flex-direction: row;
+                align-items: center;
+                gap: 6px;
+                margin-bottom: 0;
+                margin-top: 2px;
+                justify-content: flex-start;
+                margin-left: 0;
+            }
+            .hot-jobs-section .company-logo {
+                width: 24px;
+                height: 24px;
+                margin-right: 0;
+            }
+            .hot-jobs-section .company-info {
+                display: flex;
+                align-items: center;
+            }
+            .hot-jobs-section .company-name {
+                font-size: 13px;
+                color: #222;
+                font-weight: 600;
+                margin-bottom: 0;
+            }
+            .hot-jobs-section .company-type {
+                font-size: 11px;
+            }
+            .hot-jobs-section .job-location,
+            .hot-jobs-section .job-salary {
+                font-size: 14px;
+                margin-bottom: 2px;
+            }
+            .hot-jobs-section .job-tags {
+                gap: 6px;
+                margin-bottom: 6px;
+                margin-top: 0;
+                justify-content: flex-start;
+            }
+            .hot-jobs-section .job-tag {
+                font-size: 12px;
+                padding: 2px 10px;
+            }
+            .hot-jobs-section .job-applicants {
+                font-size: 12px;
+                margin-top: 4px;
+            }
+            .hot-jobs-section .job-card-right {
+                display: none !important;
+            }
+        }
+        @media (max-width: 900px) {
+            .hot-jobs-section .job-applicants {
+                display: none !important;
+            }
+            .hot-jobs-section .company-info-box {
+                display: flex !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="img/header.png" alt="Header" class="header-image">
+        <img src="img/header_p.jpg" alt="Header Mobile" class="header-image-mobile">
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="hero-section">
+                <h1 class="hero-title">找職缺，在 PaPiin !</h1>
+                <p class="hero-subtitle">只要一分鐘，快速找到工作夥伴</p>
+                
+                <div class="options-container">
+                    <div class="option-card creator" onclick="window.location.href='https://papiin.com/matching-create-case'">
+                        <img src="img/01.png" alt="Creator Icon" class="option-icon">
+                        <div class="option-content">
+                            <h2 class="option-title">我要找人</h2>
+                            <p class="option-description">發布職缺，吸引人才應徵</p>
+                        </div>
+                    </div>
+                    <div class="option-card case" onclick="window.location.href='https://papiin.com/matching.html'">
+                        <img src="img/03.png" alt="Case Icon" class="option-icon">
+                        <div class="option-content">
+                            <h2 class="option-title">我要應徵</h2>
+                            <p class="option-description">瀏覽案源，尋找工作機會</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Hot Jobs Section Start -->
+            <div class="hot-jobs-section">
+                <h3 class="hot-jobs-title">熱門職缺</h3>
+                <div class="job-card">
+                    <div class="job-card-left">
+                        <div class="job-title">影音創意與視覺設計實習生｜Lambda 浪打</div>
+                        <div class="company-info-box">
+                            <img src="img/company-logo.png" alt="公司Logo" class="company-logo">
+                            <div class="company-info">
+                                <div class="company-name">求職小幫手</div>
+                            </div>
+                        </div>
+                        <div class="job-meta-row">
+                            <div class="job-location">台北市</div>
+                            <div class="job-salary">$190 元 / 時薪</div>
+                        </div>
+                        <div class="job-desc">🎬 影音創意與視覺設計實習生招募中！</div>
+                        <div class="job-summary">你相信創與美感來自跨領域的視野，而不是只滑社群或學設計？你重視溝通、策略思維與解決問題的能力，勝過單一軟體技巧？如果你對傳統設計/影音公司的制...（以下省略）</div>
+                        <div class="job-tags">
+                            <span class="job-tag">平面設計</span>
+                            <span class="job-tag">個人可</span>
+                            <span class="job-tag">學生可</span>
+                        </div>
+                    </div>
+                    <div class="job-applicants">0~5人應徵</div>
+                </div>
+                <div class="job-card">
+                    <div class="job-card-left">
+                        <div class="job-title">社群行銷企劃｜星際行銷</div>
+                        <div class="company-info-box">
+                            <img src="img/company-logo.png" alt="公司Logo" class="company-logo">
+                            <div class="company-info">
+                                <div class="company-name">星際行銷</div>
+                            </div>
+                        </div>
+                        <div class="job-meta-row">
+                            <div class="job-location">新北市</div>
+                            <div class="job-salary">$35,000 / 月薪</div>
+                        </div>
+                        <div class="job-desc">🚀 社群行銷企劃人才招募中！</div>
+                        <div class="job-summary">負責品牌社群經營、內容規劃與活動執行，歡迎有創意、熱愛社群的你加入我們！</div>
+                        <div class="job-tags">
+                            <span class="job-tag">社群經營</span>
+                            <span class="job-tag">全職</span>
+                        </div>
+                    </div>
+                    <div class="job-applicants">3~8人應徵</div>
+                </div>
+                <div class="job-card">
+                    <div class="job-card-left">
+                        <div class="job-title">平面設計師｜創藝設計</div>
+                        <div class="company-info-box">
+                            <img src="img/company-logo.png" alt="公司Logo" class="company-logo">
+                            <div class="company-info">
+                                <div class="company-name">創藝設計</div>
+                            </div>
+                        </div>
+                        <div class="job-meta-row">
+                            <div class="job-location">台中市</div>
+                            <div class="job-salary">$180 元 / 時薪</div>
+                        </div>
+                        <div class="job-desc">🎨 平面設計師徵才，歡迎有作品集者！</div>
+                        <div class="job-summary">負責品牌視覺設計、海報與社群素材製作，具備美感與創意佳者優先。</div>
+                        <div class="job-tags">
+                            <span class="job-tag">平面設計</span>
+                            <span class="job-tag">兼職</span>
+                        </div>
+                    </div>
+                    <div class="job-applicants">1~2人應徵</div>
+                </div>
+                <a class="view-all-jobs-btn" href="https://papiin.com/matching.html" target="_blank">查看所有職缺</a>
+            </div>
+            <!-- Hot Jobs Section End -->
+        </div>
+    </main>
+
+    <footer class="footer">
+        <img src="img/footer.png" alt="Footer" class="footer-image">
+        <img src="img/footer_p.jpg" alt="Footer Mobile" class="footer-image-mobile">
+    </footer>
+
+    <script>
+        function selectOption(type) {
+            if (type === 'brand') {
+                alert('歡迎品牌方！即將進入媒合流程，找到最適合的影像創作者。');
+            } else if (type === 'creator') {
+                alert('歡迎創作者！即將進入接案平台，尋找最棒的合作機會。');
+            }
+        }
+
+        // Add smooth hover effects
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add click animation
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'translateY(-5px) scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
